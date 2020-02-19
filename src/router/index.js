@@ -5,11 +5,18 @@ import Vue from 'vue';
 // 导入路由组件
 import vueRouter from 'vue-router';
 
+// 导入其他子组件
+import login from '../views/login/index';
 // 注册路由
 Vue.use(vueRouter);
 
 // 设置路由规则
-const routes = []
+const routes = [
+    {
+        path:'/login',
+        component:login
+    }
+]
 
 // 创建路由对象
 const router = new vueRouter({

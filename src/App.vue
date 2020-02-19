@@ -2,15 +2,14 @@
   <div>
     <router-link to="/">测试路由</router-link>
     <el-button type="primary">我是一个性感的按钮</el-button>
+    <!-- 路由出口 -->
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <style>
-
 </style>
