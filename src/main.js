@@ -5,6 +5,8 @@ import {router} from './router/index';
 // 导入element-ui组件及css文件
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+// 引入全局的初始化样式
+import './style/base.css';
 
 // 注册使用element-ui
 Vue.use(ElementUI);
