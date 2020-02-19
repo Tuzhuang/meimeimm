@@ -1,5 +1,7 @@
 <template>
-  <div></div>
+  <div>
+    <router-link to="/">测试路由</router-link>
+  </div>
 </template>
 
 <script>
