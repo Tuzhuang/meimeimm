@@ -18,4 +18,4 @@ const router = new vueRouter({
 })
 
 // 导出路由文件
-export default router;
+export {router};
