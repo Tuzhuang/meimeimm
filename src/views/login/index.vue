@@ -12,25 +12,31 @@
         <span class="right-title">用户登录</span>
       </div>
       <!-- 表单部分 -->
-      <el-form label-width="43px">
-        <el-form-item>
-          <el-input placeholder="请输入手机号" clearable prefix-icon="el-icon-user"></el-input>
+      <!-- 给表单设置一个ref属性和一个model属性 还有一个:reles绑定一个规则 -->
+      <el-form ref="loginForm" :model="form" :rules="rules" label-width="43px">
+        <el-form-item prop="phone">
+          <el-input v-model="form.phone" placeholder="请输入手机号" clearable prefix-icon="el-icon-user"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input placeholder="请输入密码" show-password prefix-icon="el-icon-lock"></el-input>
+        <el-form-item prop="password">
+          <el-input
+            v-model="form.password"
+            placeholder="请输入密码"
+            show-password
+            prefix-icon="el-icon-lock"
+          ></el-input>
         </el-form-item>
         <el-row :gutter="20">
           <el-col :span="16">
-            <el-form-item>
-              <el-input placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
+            <el-form-item prop="code">
+              <el-input v-model="form.code" placeholder="请输入验证码" prefix-icon="el-icon-key"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <img class="login-code" src="./images/login_code.png" alt />
           </el-col>
         </el-row>
-        <el-form-item class="checkItem">
-          <el-checkbox ></el-checkbox>
+        <el-form-item class="checkItem" prop="checked">
+          <el-checkbox v-model="form.checked"></el-checkbox>
           <span class="checkTest">
             我已阅读并同意
             <el-link type="primary" class="link" :underline="false">用户协议</el-link>和
@@ -38,7 +44,7 @@
           </span>
         </el-form-item>
         <el-form-item>
-          <el-button class="btn" type="primary" round>登录</el-button>
+          <el-button class="btn" @click="btnLogin" type="primary" round>登录</el-button>
           <el-button class="btn" type="primary" round>注册</el-button>
         </el-form-item>
       </el-form>
@@ -49,7 +55,56 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      // 跟表单双向绑定的数据
+      form: {
+        // 手机号
+        phone: "",
+        // 密码
+        password: "",
+        // 验证码
+        code: "",
+        // 多选框
+        checked: false
+      },
+      // 规则对象
+      rules: {
+        // 真正得规则
+        phone: [
+          { required: true, message: "手机号不能为空", trigger: "blur" },
+          {
+            min: 11,
+            max: 11,
+            message: "手机号的长度只能为11位",
+            trigger: "blur"
+          }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 6, max: 32, message: "密码长度为6-32之间", trigger: "blur" }
+        ],
+        code: [{ required: true, message: "验证码不能为空", trigger: "blur" }],
+        // 多选框得规则  多选框没有失去焦点事件，只有change事件
+        // 我们要用正则来判断
+        checked:[{pattern:/true/,message:'请勾选用户协议及隐私条款',trigger:'change'}]
+      }
+    };
+  },
+  methods: {
+    // 登录按钮得点击事件
+    btnLogin() {
+      // 找到表单对象，调用validate方法
+      this.$refs.loginForm.validate(validate => {
+        if (validate) {
+          // 表单验证成功
+          alert("验证成功");
+        }
+      });
+    }
+  }
+};
 </script>
 
 <style lang="less">
@@ -105,19 +160,16 @@ export default {};
       }
     }
     .login-code {
-      width: 100%;
+      // width: 100%;
       height: 42px;
+      // 让图片不要默认基线对齐
+      vertical-align: middle;
     }
     .checkItem {
-      // display: flex;
-      // justify-items: center;
-      // align-items: center;
-      // .checkTest {
-      //   display: flex;
-      //   align-items: center;
-      // }
-      .link {
-        margin-top: -2px;
+      height: 56px;
+      .el-form-item__error {
+        position: relative;
+        top: -14px;
       }
     }
 
