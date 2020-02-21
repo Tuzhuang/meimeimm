@@ -45,14 +45,14 @@
         </el-form-item>
         <el-form-item>
           <el-button class="btn" @click="btnLogin" type="primary" round>登录</el-button>
-          <el-button class="btn" type="primary" round>注册</el-button>
+          <el-button class="btn" @click="btnRegister" type="primary" round>注册</el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 右边的图片 -->
     <img src="./images/login_banner_ele.png" alt />
     <!-- 弹出的注册对话框 -->
-    <register></register>
+    <register ref="register"></register>
   </div>
 </template>
 
@@ -84,15 +84,14 @@ export default {
         phone: [
           { required: true, message: "手机号不能为空", trigger: "blur" },
           {
-            min: 11,
-            max: 11,
-            message: "手机号的长度只能为11位",
+            pattern: /0?(13|14|15|18|17)[0-9]{9}/,
+            message: "手机号格式不正确",
             trigger: "blur"
           }
         ],
         password: [
           { required: true, message: "密码不能为空", trigger: "blur" },
-          { min: 6, max: 32, message: "密码长度为6-32之间", trigger: "blur" }
+          { min: 6, max: 32, message: "密码长度为6-32之间", trigger: "change" }
         ],
         code: [{ required: true, message: "验证码不能为空", trigger: "blur" }],
         // 多选框得规则  多选框没有失去焦点事件，只有change事件
@@ -117,6 +116,11 @@ export default {
           alert("验证成功");
         }
       });
+    },
+    // 注册按钮的点击事件
+    btnRegister(){
+      // 修改子组件的bool值
+      this.$refs.register.dialogFormVisible = true
     }
   }
 };
