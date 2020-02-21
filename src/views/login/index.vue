@@ -51,11 +51,20 @@
     </div>
     <!-- 右边的图片 -->
     <img src="./images/login_banner_ele.png" alt />
+    <!-- 弹出的注册对话框 -->
+    <register></register>
   </div>
 </template>
 
 <script>
+// 导入注册子组件
+import register from "./components/register";
+
 export default {
+  // 注册路由
+  components: {
+    register
+  },
   data() {
     return {
       // 跟表单双向绑定的数据
@@ -88,7 +97,13 @@ export default {
         code: [{ required: true, message: "验证码不能为空", trigger: "blur" }],
         // 多选框得规则  多选框没有失去焦点事件，只有change事件
         // 我们要用正则来判断
-        checked:[{pattern:/true/,message:'请勾选用户协议及隐私条款',trigger:'change'}]
+        checked: [
+          {
+            pattern: /true/,
+            message: "请勾选用户协议及隐私条款",
+            trigger: "change"
+          }
+        ]
       }
     };
   },
