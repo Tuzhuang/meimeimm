@@ -118,9 +118,11 @@ export default {
       });
     },
     // 注册按钮的点击事件
-    btnRegister(){
+    btnRegister() {
       // 修改子组件的bool值
-      this.$refs.register.dialogFormVisible = true
+      this.$refs.register.dialogFormVisible = true;
+      // 调用注册页获取验证码的方法
+      this.$refs.register.getCode();
     }
   }
 };
@@ -179,7 +181,7 @@ export default {
       }
     }
     .login-code {
-      // width: 100%;
+      width: 100%;
       height: 42px;
       // 让图片不要默认基线对齐
       vertical-align: middle;
