@@ -32,7 +32,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <img class="login-code" src="./images/login_code.png" alt />
+            <img @click="getCode" class="login-code" :src="imgCode" alt />
           </el-col>
         </el-row>
         <el-form-item class="checkItem" prop="checked">
@@ -59,6 +59,10 @@
 <script>
 // 导入注册子组件
 import register from "./components/register";
+// 导入抽取后的接口文件
+import { login } from "@/api/login.js";
+// 导入抽取后的token文件
+import {setToken} from '@/utilis/token.js';
 
 export default {
   // 注册路由
@@ -78,6 +82,8 @@ export default {
         // 多选框
         checked: false
       },
+      // 验证码图片
+      imgCode: process.env.VUE_APP_URL + "/captcha?type=login",
       // 规则对象
       rules: {
         // 真正得规则
@@ -112,8 +118,28 @@ export default {
       // 找到表单对象，调用validate方法
       this.$refs.loginForm.validate(validate => {
         if (validate) {
-          // 表单验证成功
-          alert("验证成功");
+          // 表单验证成功,发送请求登录
+          login({
+            phone: this.form.phone,
+            password: this.form.password,
+            code: this.form.code
+          }).then(res => {
+            // console.log(res);
+            // 判断
+            if (res.data.code === 200) {
+              // 消息提示
+              this.$message.success("恭喜你，登录成功！");
+              // 保存token
+              // window.localStorage.setItem('mmtoken',res.data.data.token);
+              // 调用方法保存token
+              setToken(res.data.data.token);
+              // 跳转到主页面
+              this.$router.push("/");
+            } else {
+              // 错误的消息提示
+              this.$message.error(res.data.message);
+            }
+          });
         }
       });
     },
@@ -123,6 +149,12 @@ export default {
       this.$refs.register.dialogFormVisible = true;
       // 调用注册页获取验证码的方法
       this.$refs.register.getCode();
+    },
+    // 验证码的点击事件
+    getCode() {
+      // 给imgCode重新赋值，但是要在后面加上一个参数设置为一个时间戳
+      this.imgCode =
+        process.env.VUE_APP_URL + "/captcha?type=login&z=" + Date.now();
     }
   }
 };
