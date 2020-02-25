@@ -134,7 +134,7 @@ export default {
               // 调用方法保存token
               setToken(res.data.data.token);
               // 跳转到主页面
-              this.$router.push("/");
+              this.$router.push("/index");
             } else {
               // 错误的消息提示
               this.$message.error(res.data.message);

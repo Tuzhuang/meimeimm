@@ -300,7 +300,11 @@ export default {
   // 让上传内容居中
   text-align: center;
 }
-[class^="el-icon-"] {
-  line-height: 178px !important;
+.avatar-uploader {
+  .avatar-uploader-icon {
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+  }
 }
 </style>

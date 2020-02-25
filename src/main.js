@@ -20,3 +20,7 @@ new Vue({
   router,
   render: h => h(App),
 }).$mount('#app')
+
+
+// 服务器线上地址
+// http://183.237.67.218:3002
