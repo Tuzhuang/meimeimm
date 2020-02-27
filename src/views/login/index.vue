@@ -6,7 +6,7 @@
       <div class="title-box">
         <!-- 图片logo -->
         <img class="logo" src="./images/login_logo.png" alt />
-        <span class="left-title">Face To Face</span>
+        <span @click="goHome" class="left-title">Face To Face</span>
         <!-- 竖线 -->
         <span class="line"></span>
         <span class="right-title">用户登录</span>
@@ -39,7 +39,7 @@
           <el-checkbox v-model="form.checked"></el-checkbox>
           <span class="checkTest">
             我已阅读并同意
-            <el-link type="primary" class="link" :underline="false">用户协议</el-link>和
+            <el-link type="primary" class="link" :underline="false">用户协议</el-link>&nbsp;和
             <el-link type="primary" class="link" :underline="false">隐私条款</el-link>
           </span>
         </el-form-item>
@@ -62,7 +62,7 @@ import register from "./components/register";
 // 导入抽取后的接口文件
 import { login } from "@/api/login.js";
 // 导入抽取后的token文件
-import {setToken} from '@/utilis/token.js';
+import { setToken } from "@/utilis/token.js";
 
 export default {
   // 注册路由
@@ -155,6 +155,10 @@ export default {
       // 给imgCode重新赋值，但是要在后面加上一个参数设置为一个时间戳
       this.imgCode =
         process.env.VUE_APP_URL + "/captcha?type=login&z=" + Date.now();
+    },
+    // 跳转到首页
+    goHome() {
+      this.$router.push("/index");
     }
   }
 };
@@ -198,6 +202,7 @@ export default {
         font-weight: 400;
         color: rgba(12, 12, 12, 1);
         margin-right: 14px;
+        cursor: default; // 更改鼠标样式
       }
       .line {
         width: 1px;
@@ -223,6 +228,9 @@ export default {
       .el-form-item__error {
         position: relative;
         top: -14px;
+      }
+      .link {
+        margin-top: -2px;
       }
     }
 

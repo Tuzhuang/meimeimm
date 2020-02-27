@@ -11,15 +11,20 @@
         <span class="tit">Face To Face</span>
       </div>
       <div class="right">
-        <img :src="userUrl" alt />
-        <span class="name">你好 {{username}}</span>
+        <img :src="$store.state.avatar" alt />
+        <span class="name">你好 {{$store.state.username}}</span>
         <el-button @click="btnLogout" type="primary" size="mini">退出</el-button>
       </div>
     </el-header>
     <el-container>
       <el-aside width="auto" class="ind-aside">
         <!-- 侧边导航  :router 允许跳转路由 -->
-        <el-menu :router="true" :collapse="isCollapse" default-active="/index/chart" class="el-menu-vertical-demo">
+        <el-menu
+          :router="true"
+          :collapse="isCollapse"
+          default-active="/index/chart"
+          class="el-menu-vertical-demo"
+        >
           <el-menu-item index="/index/chart">
             <i class="el-icon-pie-chart"></i>
             <span slot="title">数据概览</span>
@@ -52,17 +57,17 @@
 
 <script>
 // 导入抽取后的接口方法库
-import { info, logout } from "@/api/index.js";
+import { logout } from "@/api/index.js";
 // 导入抽取后的token文件
-import { removeToken } from "@/utilis/token.js";
+import { removeToken, getToken } from "@/utilis/token.js";
 
 export default {
   data() {
     return {
       // 用户名
-      username: "",
-      // 用户头像
-      userUrl: "",
+      // username: "",
+      // // 用户头像
+      // userUrl: "",
       //   导航菜单默认展开
       isCollapse: false
     };
@@ -72,7 +77,7 @@ export default {
     btnLogout() {
       // 弹出确认框
       this.$confirm(
-        this.username + "此操作会退出整个系统，你确定这样做吗？",
+        this.username + " -- 此操作会退出整个系统，你确定这样做吗？",
         "提示",
         {
           confirmButtonText: "确定",
@@ -92,6 +97,9 @@ export default {
             removeToken();
             // 跳转到登录页
             this.$router.push("/login");
+            // 还要把vuex中的数据删除掉
+            this.$store.commit('usernameChange','');
+            this.$store.commit('avatarChange','');
           });
         })
         .catch(() => {
@@ -102,15 +110,15 @@ export default {
         });
     }
   },
-  // 最早可以访问data属性的钩子函数
-  created() {
-    // 调用获取用户信息的接口
-    info().then(res => {
-      //   window.console.log(res);
-      // 给用户名和用户头像赋值
-      this.username = res.data.data.username;
-      this.userUrl = process.env.VUE_APP_URL + "/" + res.data.data.avatar;
-    });
+  // 最早执行的钩子函数
+  beforeCreate() {
+    // 判断用户是否登录就直接访问主页面，如果没登录需要先登录并跳转到登录页
+    if (getToken() == null) {
+      // 说明没登录
+      // 消息提示，并跳转到登录页
+      this.$message.error("请先登录才可以访问主页");
+      this.$router.push("/login");
+    }
   }
 };
 </script>
