@@ -64,10 +64,6 @@ import { removeToken, getToken } from "@/utilis/token.js";
 export default {
   data() {
     return {
-      // 用户名
-      // username: "",
-      // // 用户头像
-      // userUrl: "",
       //   导航菜单默认展开
       isCollapse: false
     };
@@ -171,13 +167,16 @@ export default {
       }
     }
   }
-  .ind-main {
-    background-color: purple;
-  }
+}
+.ind-aside .el-menu {
+  height: 100%;
 }
 // 导航菜单的动画切换
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+.ind-main {
+  background-color: peru;
 }
 </style>

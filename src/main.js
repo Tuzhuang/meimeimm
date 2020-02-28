@@ -9,6 +9,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import './style/base.css';
 // 导入vuex文件
 import store from '@/store/index';
+// 导入全局过滤器
+import '@/filters/filters.js'
 
 // 注册使用element-ui
 Vue.use(ElementUI);

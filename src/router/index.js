@@ -104,7 +104,7 @@ router.beforeEach((to, from, next) => {
     } else {
         // 调用获取用户信息的接口判断是否登录成功
         info().then(res => {
-            console.log(res);
+            // console.log(res);
             if (getToken() == null) {
                 // 说明没有登录，提示信息并跳转到登录页
                 Message.error('你还没有登录，请先登录再进入官网！');
