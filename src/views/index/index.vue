@@ -33,11 +33,11 @@
             <i class="el-icon-user"></i>
             <span slot="title">用户列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/business">
+          <el-menu-item index="/index/question">
             <i class="el-icon-edit-outline"></i>
             <span slot="title">题库列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/question">
+          <el-menu-item index="/index/business">
             <i class="el-icon-notebook-1"></i>
             <span slot="title">企业列表</span>
           </el-menu-item>
@@ -73,7 +73,7 @@ export default {
     btnLogout() {
       // 弹出确认框
       this.$confirm(
-        this.username + " -- 此操作会退出整个系统，你确定这样做吗？",
+        this.$store.state.username + " -- 此操作会退出整个系统，你确定这样做吗？",
         "提示",
         {
           confirmButtonText: "确定",

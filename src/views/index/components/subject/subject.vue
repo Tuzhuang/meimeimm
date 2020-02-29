@@ -76,7 +76,8 @@
         </el-table-column>
       </el-table>
       <!-- 分页部分 -->
-      <el-pagination class="sub-Pagin"
+      <el-pagination
+        class="sub-Pagin"
         background
         @size-change="sizeChange"
         @current-change="currentChange"
@@ -88,9 +89,11 @@
       ></el-pagination>
     </el-card>
     <!-- 新增学科对话框 -->
-    <subjectAdd ref="subAdd"></subjectAdd>
+    <!-- <subjectAdd ref="subAdd"></subjectAdd> -->
     <!-- 编辑学科对话框 -->
-    <subjectEdit ref="subEdit"></subjectEdit>
+    <!-- <subjectEdit ref="subEdit"></subjectEdit> -->
+    <!-- 将新增框和编辑框合为一体 -->
+    <subjectDialog ref="subDialog"></subjectDialog>
   </div>
 </template>
 
@@ -98,14 +101,16 @@
 // 导入接口地址
 import { getSubData, subStatus, subjectDel } from "@/api/subject";
 // 导入其他子组件
-import subjectAdd from "./components/subjectAdd";
-import subjectEdit from "./components/subjectEdit";
+// import subjectAdd from "./components/subjectAdd";
+// import subjectEdit from "./components/subjectEdit";
+import subjectDialog from "./components/subjectDialog";
 
 export default {
   // 注册组件
   components: {
-    subjectAdd,
-    subjectEdit
+    // subjectAdd,
+    // subjectEdit
+    subjectDialog
   },
   name: "subject",
   data() {
@@ -189,16 +194,20 @@ export default {
     // 新增学科的点击事件
     subjectAdd() {
       // 让对话框显示出来
-      this.$refs.subAdd.dialogFormVisible = true;
+      this.$refs.subDialog.dialogFormVisible = true;
+      // 把子组件对话框的isAdd改为true
+      this.$refs.subDialog.isAdd = true;
     },
     // 编辑学科的点击事件
     subjectEdit(item) {
       // 让编辑对话框显示出来
-      this.$refs.subEdit.dialogFormVisible = true;
+      this.$refs.subDialog.dialogFormVisible = true;
+      // 把子组件里面的isAdd改为false
+      this.$refs.subDialog.isAdd = false;
       // 要做一个判断，判断当前点击的是第一次点击的话就赋值，如果不是的话就不赋值
       if (item != this.oldItem) {
         // 给编辑面板的数据赋值  防止地址传递数据双向修改，所以重新拷贝一个新的对象
-        this.$refs.subEdit.form = { ...item };
+        this.$refs.subDialog.form = { ...item };
         // 再给当前oldItem赋值
         this.oldItem = item;
       }
@@ -219,7 +228,7 @@ export default {
             if (res.data.code === 200) {
               this.$message.success("删除学科成功");
               // 判断当前删除的时候是不是最后一条，如果是的话就让当前页减一
-              if(this.tableData.length === 1 && this.pagenum !== 1){
+              if (this.tableData.length === 1 && this.pagenum !== 1) {
                 this.pagenum--;
               }
               // 重新请求数据
