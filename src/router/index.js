@@ -111,7 +111,7 @@ router.beforeEach((to, from, next) => {
                 next('/login'); // 可以直接写要放行的页面
             } else if (res.data.code != 200) {
                 // 说明登录信息异常，那就跳转到登录页，并且弹框提示，并删除错误token
-                Message.error('登录状态异常，请重新登录！');
+                Message.warning('登录状态异常，请重新登录！');
                 // 删除错误token请跳转到登录页
                 removeToken();
                 next('/login');  // 放行到登录页，可以直接传地址
