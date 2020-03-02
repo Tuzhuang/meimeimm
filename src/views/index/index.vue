@@ -25,26 +25,34 @@
           default-active="/index/chart"
           class="el-menu-vertical-demo"
         >
-          <el-menu-item index="/index/chart">
-            <i class="el-icon-pie-chart"></i>
-            <span slot="title">数据概览</span>
+        <!-- 根据当前用户的权限来控制下面菜单的渲染 -->
+        <template v-for="(item, index) in childrenRoutes" >
+          <el-menu-item :key="index" :index="'/index/'+item.path" v-if="item.meta.roles.includes($store.state.role)">
+            <i :class="item.meta.icon"></i>
+            <span slot="title">{{item.meta.name}}</span>
           </el-menu-item>
-          <el-menu-item index="/index/user">
-            <i class="el-icon-user"></i>
+        </template>
+        <!-- <template v-for="(item, index) in childrenRouter" :key="index"> -->
+          
+        <!-- </template> -->
+
+
+          <!-- <el-menu-item index="/index/user" v-if="['超级管理员', '管理员'].includes($store.state.role)">
+            <i class="item.meta.iconi>
             <span slot="title">用户列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/question">
-            <i class="el-icon-edit-outline"></i>
+          <el-menu-item index="/index/question" v-if="['超级管理员', '管理员','老师','学生'].includes($store.state.role)">
+            <i class="item.meta.icon"></i>
             <span slot="title">题库列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/business">
-            <i class="el-icon-notebook-1"></i>
+          <el-menu-item index="/index/business" v-if="['超级管理员', '管理员','老师'].includes($store.state.role)">
+            <i class="item.meta.icon"></i>
             <span slot="title">企业列表</span>
           </el-menu-item>
-          <el-menu-item index="/index/subject">
-            <i class="el-icon-office-building"></i>
+          <el-menu-item index="/index/subject" v-if="['超级管理员', '管理员','老师','学生'].includes($store.state.role)">
+            <i class="item.meta.icon"></i>
             <span slot="title">学科列表</span>
-          </el-menu-item>
+          </el-menu-item> -->
         </el-menu>
       </el-aside>
       <el-main class="ind-main">
@@ -60,12 +68,17 @@
 import { logout } from "@/api/index.js";
 // 导入抽取后的token文件
 import { removeToken, getToken } from "@/utilis/token.js";
+// 导入抽取后的子路由文件
+import childrenRoutes from '@/router/childrenRoutes.js';
 
 export default {
+  name:'index',
   data() {
     return {
       //   导航菜单默认展开
-      isCollapse: false
+      isCollapse: false,
+      // 抽取后的子路由文件
+      childrenRoutes
     };
   },
   methods: {

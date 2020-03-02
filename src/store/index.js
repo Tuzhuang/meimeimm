@@ -7,18 +7,23 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-    state:{
+    state: {
         // 存数据
-        username:'',
-        avatar:''
+        username: '',
+        avatar: '',
+        role: '' // 用来存当前用户的角色
     },
-    mutations:{
+    mutations: {
         // 存方法
-        usernameChange(state,val){
+        usernameChange(state, val) {
             state.username = val;
         },
-        avatarChange(state,val){
+        avatarChange(state, val) {
             state.avatar = val;
+        },
+        // 专门用来修改当前用户角色的方法
+        roleChange(state, val) {
+            state.role = val;
         }
     }
 })

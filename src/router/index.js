@@ -9,12 +9,8 @@ import vueRouter from 'vue-router';
 import login from '../views/login/index';
 import index from '@/views/index/index';
 // 主页面的子路由
-import chart from '@/views/index/components/chart/chart';
-import user from '@/views/index/components/user/user';
-import business from '@/views/index/components/business/business';
-import question from '@/views/index/components/question/question';
-import subject from '@/views/index/components/subject/subject';
-
+// 导入抽取后的子路由js文件
+import childrenRoutes from '@/router/childrenRoutes.js';
 
 // 导入进度条NProgress插件和css文件
 import NProgress from 'nprogress';
@@ -41,39 +37,14 @@ const routes = [
     {
         path: '/login', // 登录页面的路由
         component: login,
-        meta:{name:'Face To Face  登录'}
+        meta: { name: 'Face To Face  登录', roles: ['超级管理员', '管理员', '老师', '学生'] }
     },
     {
         path: '/index',  // 首页的路由
         component: index,
-        meta:{name:'Face To Face  主页'},
-        children: [ // 主页的子路由
-            {
-                path: 'chart', // 子路由可以不加 / 
-                component: chart,
-                meta:{name:'Face To Face  数据概览'}
-            },
-            {
-                path: 'user', // 子路由可以不加 / 
-                component: user,
-                meta:{name:'Face To Face  用户列表'}
-            },
-            {
-                path: 'business', // 子路由可以不加 / 
-                component: business,
-                meta:{name:'Face To Face  题库列表'}
-            },
-            {
-                path: 'question', // 子路由可以不加 / 
-                component: question,
-                meta:{name:'Face To Face  企业列表'}
-            },
-            {
-                path: 'subject', // 子路由可以不加 / 
-                component: subject,
-                meta:{name:'Face To Face  学科列表'}
-            }
-        ]
+        meta: { title: 'Face To Face  主页', roles: ['超级管理员', '管理员', '老师', '学生'] },
+        // 主页的子路由  抽取后的子路由
+        children: childrenRoutes
     },
     { // 路由重定向
         path: '*',
@@ -118,13 +89,37 @@ router.beforeEach((to, from, next) => {
                 // 手动结束进度条
                 NProgress.done();
             } else {
-                if(res.data.code === 200){
+                // 不光要在状态码正确的时候才能登录，而且还要保证此账号是启用状态
+                if (res.data.code === 200 && res.data.data.status == 1) {
                     // 给vuex中的数据赋值
-                    store.commit('usernameChange',res.data.data.username);
-                    store.commit('avatarChange',process.env.VUE_APP_URL+'/'+ res.data.data.avatar);
+                    store.commit('usernameChange', res.data.data.username);
+                    store.commit('avatarChange', process.env.VUE_APP_URL + '/' + res.data.data.avatar);
+                    // 获取到数据之后给vuex中的存储角色的变量赋值
+                    store.commit('roleChange',res.data.data.role);
+                    // 判断一下，只有在从login页面跳转过来的时候才需要弹框
+                    if (from.path == '/login') {
+                        // 弹框提示登录成功
+                        Message.success("恭喜你，登录成功！");
+                    }
+                    // 除此之外，还要判断一下该用户的权限是否可以访问该访问的页面
+                    if (!(to.meta.roles.includes(res.data.data.role))) {
+                        // 说明不存在，该用户无法访问要弹框提示，并将地址跳转到访问前的路径下
+                        Message.warning('很抱歉，目前来看，你的账号还没有为你开通访问该页面的权限');
+                        // 跳转回来时候的页面
+                        next(from.path);
+                        // 手动关闭进度条
+                        NProgress.done();
+                    } else {
+                        // next是一个函数，调用这个函数代表放行
+                        next();
+                    }
+                } else {
+                    // 否则就跳转回登录页，并弹出提示
+                    next('/login');
+                    Message.warning('此账号已被禁用，具体请联系管理员');
+                    // 手动结束进度条
+                    NProgress.done();
                 }
-                // next是一个函数，调用这个函数代表放行
-                next();
             }
         })
     }
@@ -140,7 +135,7 @@ router.afterEach((from) => {
 
     // 根据路由元信息来设置页面的title
     // console.log(from.meta.name);
-    document.title = from.meta.name;
+    document.title = from.meta.title;
 })
 
 // 导出路由文件

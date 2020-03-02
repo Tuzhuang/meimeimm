@@ -62,7 +62,8 @@
             <span v-else style="color:red">禁用</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <!-- 根据用户权限来判断，当前是否可以操作这个权限 -->
+        <el-table-column label="操作" v-if="['超级管理员','管理员','老师'].includes($store.state.role)">
           <template slot-scope="scope">
             <el-button @click="subjectEdit(scope.row)" type="primary" size="mini" round>编辑</el-button>
             <el-button
@@ -71,7 +72,8 @@
               size="mini"
               round
             >{{scope.row.status === 1?'禁用':'启用'}}</el-button>
-            <el-button @click="subjectDel(scope.row.id)" type="danger" size="mini" round>删除</el-button>
+            <!-- 同上 -->
+            <el-button v-if="['超级管理员','管理员'].includes($store.state.role)" @click="subjectDel(scope.row.id)" type="danger" size="mini" round>删除</el-button>
           </template>
         </el-table-column>
       </el-table>

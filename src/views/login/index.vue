@@ -128,7 +128,7 @@ export default {
             // 判断
             if (res.data.code === 200) {
               // 消息提示
-              this.$message.success("恭喜你，登录成功！");
+              // 把消息提示写在前置导航守卫里面
               // 保存token
               // window.localStorage.setItem('mmtoken',res.data.data.token);
               // 调用方法保存token
