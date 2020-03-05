@@ -11,6 +11,28 @@ import './style/base.css';
 import store from '@/store/index';
 // 导入全局过滤器
 import '@/filters/filters.js'
+// 导入全局封装好的学科列表下拉框插件
+import subjectSelect from '@/components/subjectSelect.vue';
+// 导入全局封装好的企业列表下拉框插件
+import businessSelect from '@/components/businessSelect.vue';
+// 导入全局封装好的城市级联框插件
+import ChinaArea from '@/views/index/components/question/components/ChinaArea.vue'
+// 导入全局封装好的wangEditor插件
+import wangEditor from '@/views/index/components/question/components/wangEditor.vue';
+// 导入全局封装好的单选框组插件
+import optionItem from '@/views/index/components/question/components/optionItem.vue';
+// 导入全局封装好的视频解析的插件
+import videoUpload from '@/views/index/components/question/components/videoUpload.vue'
+
+
+// 注册使用全局插件
+Vue.component('subjectSelect', subjectSelect);
+Vue.component('businessSelect', businessSelect);
+Vue.component('ChinaArea', ChinaArea);
+Vue.component('wangEditor',wangEditor);
+Vue.component('optionItem',optionItem);
+Vue.component('videoUpload',videoUpload);
+
 
 // 注册使用element-ui
 Vue.use(ElementUI);

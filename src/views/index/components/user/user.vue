@@ -47,7 +47,14 @@
         <el-table-column prop="username" label="用户名" width="180"></el-table-column>
         <el-table-column prop="phone" label="电话" width="220"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
-        <el-table-column prop="role" label="角色"></el-table-column>
+        <el-table-column prop="role_id" label="角色">
+          <template slot-scope="scope">
+            <span v-if="scope.row.role_id === 2">管理员</span>
+            <span v-else-if="scope.row.role_id === 3">老师</span>
+            <span v-else-if="scope.row.role_id === 4">学生</span>
+            <span v-else>游客</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="remark" label="备注"></el-table-column>
         <el-table-column label="状态" width="120">
           <template slot-scope="scope">
@@ -88,7 +95,7 @@
 
 <script>
 // 导入接口地址
-import { getUserData, userStatus, userDel } from "@/api/user";
+import { getUserData, userStatus,userDel } from "@/api/user";
 // 导入其他子组件
 import userDialog from "./components/userDialog";
 
@@ -190,7 +197,7 @@ export default {
       // 给子组件的isAdd设置为false
       this.$refs.userDialog.isAdd = false;
       // 给子组件的状态添加一个值用于显示状态
-      item.statusVal = item.status == 1 ? "启用" : "禁用";
+      item.statusVal = item.status==1?'启用':'禁用';
       // 要做一个判断，判断当前点击的是第一次点击的话就赋值，如果不是的话就不赋值
       if (item != this.oldItem) {
         // 给编辑面板的数据赋值  防止地址传递数据双向修改，所以重新拷贝一个新的对象
@@ -215,7 +222,7 @@ export default {
             if (res.data.code === 200) {
               this.$message.success("删除用户成功");
               // 判断当前删除的时候是不是最后一条，如果是的话就让当前页减一
-              if (this.tableData.length === 1 && this.pagenum !== 1) {
+              if(this.tableData.length === 1 && this.pagenum !== 1){
                 this.pagenum--;
               }
               // 重新请求数据

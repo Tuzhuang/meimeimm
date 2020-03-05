@@ -203,7 +203,7 @@ export default {
       this.$refs.busiDialog.dialogFormVisible = true;
       // 给子组件的isAdd设置为false
       this.$refs.busiDialog.isAdd = false;
-      // 要做一个判断，判断当前点击的是第一次点击的话就赋值，如果不是的话就不赋值
+      // 要做一个判断，判断当前点击的是第一次点击的话就不赋值，如果不是的话就赋值
       if (item != this.oldItem) {
         // 给编辑面板的数据赋值  防止地址传递数据双向修改，所以重新拷贝一个新的对象
         this.$refs.busiDialog.form = { ...item };
