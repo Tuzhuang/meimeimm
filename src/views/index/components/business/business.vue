@@ -76,7 +76,8 @@
         </el-table-column>
       </el-table>
       <!-- 分页部分 -->
-      <el-pagination class="sub-Pagin"
+      <el-pagination
+        class="sub-Pagin"
         background
         @size-change="sizeChange"
         @current-change="currentChange"
@@ -98,11 +99,11 @@
 
 <script>
 // 导入接口地址
-import { getBusiData,busiStatus,businessDel } from "@/api/business";
+import { getBusiData, busiStatus, businessDel } from "@/api/business";
 // 导入其他子组件
 // import businessAdd from "./components/businessAdd";
 // import businessEdit from "./components/businessEdit";
-import businessDialog from './components/businessDialog';
+import businessDialog from "./components/businessDialog";
 
 export default {
   // 注册组件
@@ -125,7 +126,11 @@ export default {
       // 分页数据总条数
       total: 0,
       // 记录上次点击的是哪一行的数据
-      oldItem: null
+      oldItem: null,
+      // 设置一个变量来看当前是否点击了新增
+      isClickAdd: false,
+      // 把点击新增之前的对话框里面已经修改了的数据保存起来
+      tempForm: {}
     };
   },
   methods: {
@@ -148,7 +153,7 @@ export default {
     // 修改企业状态的点击事件
     businessStatus(id) {
       // 请求接口修改状态
-      busiStatus({id:id}).then(res => {
+      busiStatus({ id: id }).then(res => {
         console.log(res);
         // 判断
         if (res.data.code === 200) {
@@ -196,6 +201,12 @@ export default {
       this.$refs.busiDialog.dialogFormVisible = true;
       // 把子组件的isAdd设置为true
       this.$refs.busiDialog.isAdd = true;
+      // 点击新增之前先把对话框里面已经修改的数据保存起来
+      this.tempForm = this.$refs.busiDialog.form;
+      // 把子组件的表单清空
+      this.$refs.busiDialog.form = {};
+      // 还要把是否当前点击了新增的bool值设置为true
+      this.isClickAdd = true;
     },
     // 编辑学科的点击事件
     busiEdit(item) {
@@ -209,6 +220,10 @@ export default {
         this.$refs.busiDialog.form = { ...item };
         // 再给当前oldItem赋值
         this.oldItem = item;
+      } else if (this.isClickAdd) {
+        // 如果有点击了新增，就把新增之前保存的数据再赋值给对话框
+        this.$refs.busiDialog.form = this.tempForm; 
+        // 那这个时候就应该把新增之前输入框的内容就赋值给编辑对话框
       }
     },
     // 删除按钮的点击事件
@@ -227,7 +242,7 @@ export default {
             if (res.data.code === 200) {
               this.$message.success("删除学科成功");
               // 判断当前删除的时候是不是最后一条，如果是的话就让当前页减一
-              if(this.tableData.length === 1 && this.pagenum !== 1){
+              if (this.tableData.length === 1 && this.pagenum !== 1) {
                 this.pagenum--;
               }
               // 重新请求数据

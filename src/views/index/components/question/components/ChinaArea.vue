@@ -1,5 +1,10 @@
 <template>
-  <el-cascader v-model="city" :options="options" :props="{ expandTrigger: 'hover',value:'label' }" @change="handleChange"></el-cascader>
+  <el-cascader
+    v-model="city"
+    :options="options"
+    :props="{ expandTrigger: 'hover',value:'label' }"
+    @change="handleChange"
+  ></el-cascader>
 </template>
 
 <script>
@@ -20,11 +25,17 @@ export default {
       options: regionDataPlus
     };
   },
-  methods:{
-      handleChange(){
-          // 给父组件传值
-          this.$emit('input',this.city);
-      }
+  methods: {
+    handleChange() {
+      // 给父组件传值
+      this.$emit("input", this.city);
+    }
+  },
+  watch: {
+    // 侦听value的值发生变化的时候就复制给city
+    value(val) {
+      this.city = val;
+    }
   }
 };
 </script>

@@ -3,10 +3,7 @@
     <!-- 菜单栏 -->
     <div ref="toolbar" class="toolbar"></div>
     <!-- 内容区 -->
-    <div ref="content" class="content">
-      <p v-html="value"></p>
-      <!-- <i>请在这里输入</i> -->
-    </div>
+    <div ref="content" class="content"></div>
   </div>
 </template>
 
@@ -21,8 +18,14 @@ export default {
       default: ""
     }
   },
+  data() {
+    return {
+      editor: null
+    };
+  },
   mounted() {
     let editor = new wangEditor(this.$refs.toolbar, this.$refs.content); // 两个参数也可以传入 elem 对象，class 选择器
+    this.editor = editor;
     // 监听富文本值改变事件
     // function声明的函数，里面的this默认是window,
     // 所以我们这里不要用function，因为它会改变this指向
@@ -32,6 +35,15 @@ export default {
       this.$emit("input", html);
     };
     editor.create();
+    // 把父组件传递过来的值赋值给富文本
+    editor.txt.html(this.value);
+  },
+  // 因为mounted中的值只会改变一次，所以要用侦听器来设置一下
+  watch: {
+    value(val) {
+      // 把父组件传递过来的值赋值给富文本
+      this.editor.txt.html(val);
+    }
   }
 };
 </script>
@@ -44,7 +56,7 @@ export default {
 .content {
   width: 74%;
   border: 1px solid #ccc;
-  height: 50px;
+  height: 200px;
   margin-top: -1px;
 }
 .editorBox {

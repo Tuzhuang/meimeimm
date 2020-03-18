@@ -192,9 +192,7 @@ export default {
       if (item != this.oldItem) {
         this.$refs.quesDialog.form = { ...item };
         // 赋值的时候因为城市需要的诗句是数组格式，但是获取到的是字符串格式，所以需要转换一下
-        this.$refs.quesDialog.form.city = this.$refs.quesDialog.form.city.split(
-          ","
-        );
+        this.$refs.quesDialog.form.city = this.$refs.quesDialog.form.city.split(",");
         // 多选题同样的问题
         this.$refs.quesDialog.form.multiple_select_answer = this.$refs.quesDialog.form.multiple_select_answer.split(
           ","

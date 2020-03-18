@@ -1,7 +1,12 @@
 <template>
   <div class="quesDialog">
     <!-- fullscreen  全屏展示  对话框关闭的时候要销毁对话框里面的数据 -->
-    <el-dialog destroy-on-close fullscreen :title="isAdd?'新增题库':'编辑题库'" :visible.sync="dialogFormVisible">
+    <el-dialog
+      destroy-on-close
+      fullscreen
+      :title="isAdd?'新增题库':'编辑题库'"
+      :visible.sync="dialogFormVisible"
+    >
       <el-form ref="quesForm" :model="form" :rules="rules">
         <el-form-item label="学科" prop="subject" :label-width="formLabelWidth">
           <!-- 使用全局组件学科下拉框 -->
@@ -44,7 +49,12 @@
           <wangEditor v-model="form.title"></wangEditor>
         </el-form-item>
         <!-- 单选框组 -->
-        <el-form-item v-if="form.type == '1'" label="单选" prop="single_select_answer" :label-width="formLabelWidth">
+        <el-form-item
+          v-if="form.type == '1'"
+          label="单选"
+          prop="single_select_answer"
+          :label-width="formLabelWidth"
+        >
           <el-radio-group v-model="form.single_select_answer">
             <!-- 使用封装后的单选框组件 父组件给子组件传值 -->
             <optionItem
@@ -57,7 +67,12 @@
           </el-radio-group>
         </el-form-item>
         <!-- 多选框组 -->
-        <el-form-item v-else-if="form.type == '2'" label="多选" prop="multiple_select_answer" :label-width="formLabelWidth">
+        <el-form-item
+          v-else-if="form.type == '2'"
+          label="多选"
+          prop="multiple_select_answer"
+          :label-width="formLabelWidth"
+        >
           <el-checkbox-group v-model="form.multiple_select_answer">
             <!-- 使用封装后的单选框组件 可以改成多选框组件 给组组件传值-->
             <optionItem
@@ -71,7 +86,13 @@
           </el-checkbox-group>
         </el-form-item>
         <!-- 简答组 -->
-        <el-form-item v-else-if="form.type == '3'" label="简答" class="myError" prop="short_answer" :label-width="formLabelWidth">
+        <el-form-item
+          v-else-if="form.type == '3'"
+          label="简答"
+          class="myError"
+          prop="short_answer"
+          :label-width="formLabelWidth"
+        >
           <el-input
             class="textarea"
             v-model="form.short_answer"
@@ -117,7 +138,7 @@
 
 <script>
 // 导入新增题库的接口文件
-import {quesAdd} from '@/api/question.js';
+import { quesAdd, quesEdit } from "@/api/question.js";
 
 export default {
   data() {
@@ -130,80 +151,134 @@ export default {
       form: {
         type: 1,
         // 城市
-        city:'',
+        city: "",
         // 单选框组的答案
         select_options: [
           {
             label: "A",
             text: "李雅",
-            image: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402875394&di=2e9a31b8e17c10981ae9d5ce7b26cd1b&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171011%2F1e662fa8672442b68505c86dd5ba8da6.jpeg"
+            image:
+              "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402875394&di=2e9a31b8e17c10981ae9d5ce7b26cd1b&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20171011%2F1e662fa8672442b68505c86dd5ba8da6.jpeg"
           },
           {
             label: "B",
             text: "学姐",
-            image: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402875393&di=b93b139c0cc6cd8806b092e0e4ad7958&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180809%2F09e9907c8b134327bd24a206131422b6.jpeg"
+            image:
+              "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402875393&di=b93b139c0cc6cd8806b092e0e4ad7958&imgtype=0&src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20180809%2F09e9907c8b134327bd24a206131422b6.jpeg"
           },
           {
             label: "C",
             text: "小程同学",
-            image: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402950874&di=2e8e00ec7ad49266e44586cd262d815a&imgtype=0&src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-8c7ee3322ae3c280f734c7bd04d00f03.jpg"
+            image:
+              "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402950874&di=2e8e00ec7ad49266e44586cd262d815a&imgtype=0&src=http%3A%2F%2Fpic2.zhimg.com%2Fv2-8c7ee3322ae3c280f734c7bd04d00f03.jpg"
           },
           {
             label: "D",
             text: "精神小妹",
-            image: "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402950874&di=8ad04a380d9b6577d9d5d82f0d8cd5e6&imgtype=0&src=http%3A%2F%2Fimg1.daofengdj.com%2Fuploads%2Fphoto%2F20191208%2F31793fv7zu5jy2xayxr2m0t4vl29p98x.jpg"
+            image:
+              "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1583402950874&di=8ad04a380d9b6577d9d5d82f0d8cd5e6&imgtype=0&src=http%3A%2F%2Fimg1.daofengdj.com%2Fuploads%2Fphoto%2F20191208%2F31793fv7zu5jy2xayxr2m0t4vl29p98x.jpg"
           }
         ],
         // 多选框组的答案
         multiple_select_answer: [],
         // 简答题答案
-        short_answer: ""
+        short_answer: "",
+        // 答案解析
+        answer_analyze: ""
       },
-      rules:{
-        subject:{required:true,message:'学科不能为空',trigger:'change'},
-        step:{required:true,message:'阶段不能为空',trigger:'change'},
-        enterprise:{required:true,message:'企业不能为空',trigger:'change'},
-        city:{required:true,message:'城市不能为空',trigger:'change'},
-        type:{required:true,message:'题型不能为空',trigger:'blur'},
-        difficulty:{required:true,message:'难度不能为空',trigger:'blur'},
-        title:{required:true,message:'试题标题不能为空',trigger:'blur'},
-        single_select_answer:{required:true,message:'单选框组不能为空',trigger:'blur'},
-        multiple_select_answer:{required:true,message:'多选框组不能为空',trigger:'blur'},
-        short_answer:{required:true,message:'简答不能为空',trigger:'blur'},
-        answer_analyze:{required:true,message:'答案解析不能为空',trigger:'blur'},
-        remark:{required:true,message:'试题备注不能为空',trigger:'blur'}
+      rules: {
+        subject: { required: true, message: "学科不能为空", trigger: "change" },
+        step: { required: true, message: "阶段不能为空", trigger: "change" },
+        enterprise: {
+          required: true,
+          message: "企业不能为空",
+          trigger: "change"
+        },
+        city: { required: true, message: "城市不能为空", trigger: "change" },
+        type: { required: true, message: "题型不能为空", trigger: "blur" },
+        difficulty: {
+          required: true,
+          message: "难度不能为空",
+          trigger: "blur"
+        },
+        title: {
+          required: true,
+          message: "试题标题不能为空",
+          trigger: "change"
+        },
+        single_select_answer: {
+          required: true,
+          message: "单选框组不能为空",
+          trigger: "blur"
+        },
+        multiple_select_answer: {
+          required: true,
+          message: "多选框组不能为空",
+          trigger: "change"
+        },
+        short_answer: {
+          required: true,
+          message: "简答不能为空",
+          trigger: "blur"
+        },
+        answer_analyze: {
+          required: true,
+          message: "答案解析不能为空",
+          trigger: "blur"
+        },
+        remark: { required: true, message: "试题备注不能为空", trigger: "blur" }
       },
       // 用来判断当前点击的是新增还是编辑
-      isAdd:true
+      isAdd: true
     };
   },
   methods: {
     // 新增对话框确认按钮的点击事件
-    quesAdd(){
+    quesAdd() {
       // 先对整个表单进行验证
-      this.$refs.quesForm.validate(valid=>{
-        if(valid){
-          // 表单验证成功之后要发送请求
-          quesAdd(this.form).then(res=>{
-            // console.log(res);
-            // 判断
-            if(res.data.code === 200){
-              this.$message.success('新增题库成功！');
-              // 刷新数据
-              this.$parent.getQuesData();
-              // 关闭对话框
-              this.dialogFormVisible = false;
-              // 还要清空表单
-              this.$refs.quesForm.resetFields();
-            }else{
-              this.$message.error(res.data.message);
-            }
-          })
-        }else{
+      this.$refs.quesForm.validate(valid => {
+        if (valid) {
+          // 先判断当前进行的是新增还是编辑
+          if (this.isAdd) {
+            // 表单验证成功之后要发送请求
+            quesAdd(this.form).then(res => {
+              // console.log(res);
+              // 判断
+              if (res.data.code === 200) {
+                this.$message.success("新增题库成功！");
+                // 刷新数据
+                this.$parent.getQuesData();
+                // 关闭对话框
+                this.dialogFormVisible = false;
+                // 还要清空表单
+                this.$refs.quesForm.resetFields();
+              } else {
+                this.$message.error(res.data.message);
+              }
+            });
+          } else {
+            // 编辑的接口
+            quesEdit(this.form).then(res => {
+              // console.log(res);
+              // 判断
+              if (res.data.code === 200) {
+                this.$message.success("编辑题库成功！");
+                // 刷新数据
+                this.$parent.getQuesData();
+                // 关闭对话框
+                this.dialogFormVisible = false;
+                // 还要清空表单
+                this.$refs.quesForm.resetFields();
+              } else {
+                this.$message.error(res.data.message);
+              }
+            });
+          }
+        } else {
           // 消息提示
-          this.$message.error('表单验证未通过');
+          this.$message.error("表单验证未通过");
         }
-      })
+      });
     }
   }
 };
@@ -245,7 +320,7 @@ export default {
   .video {
     width: 600px;
   }
-  .myError .el-form-item__error{
+  .myError .el-form-item__error {
     margin-top: 20px;
   }
   .dialog-footer {

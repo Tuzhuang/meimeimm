@@ -28,7 +28,7 @@
 
 <script>
 // 导入新增企业的接口
-import { businessAdd,businessEdit } from "@/api/business.js";
+import { businessAdd, businessEdit } from "@/api/business.js";
 
 export default {
   data() {
